@@ -1,0 +1,35 @@
+# Dependencias de Composer
+/vendor/
+composer.lock
+
+# Configuración del entorno
+.env
+.env.backup
+.env.production
+
+# Archivos generados por PHPUnit
+.phpunit.result.cache
+
+# Archivos de configuración de IDEs y editores
+/.idea/
+/.vscode/
+/.phpintel/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs y caches
+/logs/*
+!/logs/.gitkeep
+/cache/*
+!/cache/.gitkeep
+
+# Otros archivos que no queremos en el repositorio
+*.log
+*.bak
+*.swp
+*~
