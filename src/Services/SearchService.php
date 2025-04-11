@@ -68,24 +68,20 @@ class SearchService
      * @return array Array de objetos SearchableInterface
      * @throws \InvalidArgumentException Si la palabra clave tiene menos de 3 caracteres
      */
-    public function search(string $keyword): array
-    {
-        // Validar longitud mínima
-        if (mb_strlen(trim($keyword)) < 3) {
-            throw new \InvalidArgumentException(
-                'La palabra clave debe tener al menos 3 caracteres'
-            );
+    public function search(string $keyword): array {
+        if (strlen($keyword) < 3) {
+            throw new \InvalidArgumentException("La palabra clave es demasiado corta");
         }
+        // Ojo: utiliza los métodos para crear los repositorios.
+        $claseRepo = $this->createClaseRepository();
+        $examenRepo = $this->createExamenRepository();
 
-        // Buscar en clases
-        $clases = $this->claseRepository->searchByKeyword($keyword);
+        $clases = $claseRepo->searchByKeyword($keyword);
+        $examenes = $examenRepo->searchByKeyword($keyword);
 
-        // Buscar en exámenes
-        $examenes = $this->examenRepository->searchByKeyword($keyword);
-
-        // Combinar resultados
         return array_merge($clases, $examenes);
     }
+
 
     /**
      * Formatea los resultados de la búsqueda para mostrarlos en la consola.

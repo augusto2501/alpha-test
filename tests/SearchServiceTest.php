@@ -119,4 +119,35 @@ class SearchServiceTest extends TestCase
 
         $searchService->search('ab'); // Solo 2 caracteres
     }
+
+    public function testSearchCaseInsensitive(): void
+    {
+        $clase = new Clase(1, 'Vocabulario sobre Trabajo', 5);
+        $examen = new Examen(2, 'Examen de Trabajo', Examen::TIPO_SELECCION);
+
+        $claseRepositoryMock = $this->createMock(ClaseRepository::class);
+        $claseRepositoryMock->method('searchByKeyword')
+            ->willReturn([$clase]);
+
+        $examenRepositoryMock = $this->createMock(ExamenRepository::class);
+        $examenRepositoryMock->method('searchByKeyword')
+            ->willReturn([$examen]);
+
+        $searchService = $this->getMockBuilder(SearchService::class)
+            ->onlyMethods(['createClaseRepository', 'createExamenRepository'])
+            ->getMock();
+
+        $searchService->method('createClaseRepository')
+            ->willReturn($claseRepositoryMock);
+        $searchService->method('createExamenRepository')
+            ->willReturn($examenRepositoryMock);
+
+        // Búsqueda con distintas capitalizaciones
+        $resultsLower = $searchService->search('trabajo');
+        $resultsUpper = $searchService->search('TRABAJO');
+
+        $this->assertCount(2, $resultsLower);
+        $this->assertEquals($resultsLower, $resultsUpper);
+    }
+
 }
